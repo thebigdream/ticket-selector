@@ -1,0 +1,316 @@
+<!DOCTYPE HTML>
+<HTML lang="en">
+   <HEAD>
+      <TITLE>Test</TITLE>
+   </HEAD>
+   <BODY>
+   <p id ="test"></p>
+   </BODY>
+</HTML>
+
+
+<div id="ticket-selector">
+<h2>Ticket Selector</h2>   
+</div>
+<script>
+const selected = []; //the selected options
+const products =
+[
+ {
+  "name": "free travel",
+  "0-4 years": 5,
+  "5-14 years": 0,
+  "15 years older": 0,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 0,
+  "frequent": 0,
+  "infrequent": 0,
+  "non-seq": 0
+ },
+ {
+  "name": "go card child",
+  "0-4 years": 0,
+  "5-14 years": 5,
+  "15 years older": 0,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 0,
+  "frequent": 0,
+  "infrequent": 0,
+  "non-seq": -5
+ },
+ {
+  "name": "go card concession",
+  "0-4 years": 0,
+  "5-14 years": 0,
+  "15 years older": 3,
+  "primary school student": 0,
+  "high school student": 5,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 5,
+  "veteran": 0,
+  "tourist": 0,
+  "frequent": 0,
+  "infrequent": 0,
+  "non-seq": -5
+ },
+ {
+  "name": "go card senior & senior plus",
+  "0-4 years": 0,
+  "5-14 years": 0,
+  "15 years older": 0,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 5,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 2,
+  "veteran": 2,
+  "tourist": 0,
+  "frequent": 0,
+  "infrequent": 0,
+  "non-seq": -5
+ },
+ {
+  "name": "go card stas",
+  "0-4 years": 0,
+  "5-14 years": 3,
+  "15 years older": 1,
+  "primary school student": 5,
+  "high school student": 5,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 0,
+  "frequent": 0,
+  "infrequent": 0,
+  "non-seq": -5
+ },
+ {
+  "name": "go card adult",
+  "0-4 years": 0,
+  "5-14 years": 0,
+  "15 years older": 3,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 5,
+  "senior": 1,
+  "job seeker": 5,
+  "asylum seeker": 5,
+  "disability": 2,
+  "disability carer": 2,
+  "pension": 1,
+  "veteran": 2,
+  "tourist": 3,
+  "frequent": 5,
+  "infrequent": 3,
+  "non-seq": -5
+ },
+ {
+  "name": "go explore child",
+  "0-4 years": 0,
+  "5-14 years": 3,
+  "15 years older": 0,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 5,
+  "frequent": 0,
+  "infrequent": 1,
+  "non-seq": -5
+ },
+ {
+  "name": "go explore adult",
+  "0-4 years": 0,
+  "5-14 years": 0,
+  "15 years older": 1,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 5,
+  "frequent": 0,
+  "infrequent": 1,
+  "non-seq": -5
+ },
+ {
+  "name": "go seeq child",
+  "0-4 years": 0,
+  "5-14 years": 1,
+  "15 years older": 0,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 5,
+  "frequent": 0,
+  "infrequent": 1,
+  "non-seq": -5
+ },
+ {
+  "name": "go seeq adult",
+  "0-4 years": 0,
+  "5-14 years": 0,
+  "15 years older": 1,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 5,
+  "frequent": 0,
+  "infrequent": 1,
+  "non-seq": -5
+ },
+ {
+  "name": "access pass",
+  "0-4 years": 0,
+  "5-14 years": 0,
+  "15 years older": 0,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 5,
+  "disability carer": 5,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 0,
+  "frequent": 0,
+  "infrequent": 0,
+  "non-seq": 0
+ },
+ {
+  "name": "TPI\/EDA",
+  "0-4 years": 0,
+  "5-14 years": 0,
+  "15 years older": 0,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 5,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 3,
+  "tourist": 0,
+  "frequent": 0,
+  "infrequent": 0,
+  "non-seq": 0
+ },
+ {
+  "name": "paper ticket",
+  "0-4 years": 0,
+  "5-14 years": 0,
+  "15 years older": 0,
+  "primary school student": 0,
+  "high school student": 0,
+  "tertiary student": 0,
+  "senior": 0,
+  "job seeker": 0,
+  "asylum seeker": 0,
+  "disability": 0,
+  "disability carer": 0,
+  "pension": 0,
+  "veteran": 0,
+  "tourist": 3,
+  "frequent": 0,
+  "infrequent": 3,
+  "non-seq": 5
+ }
+]
+const options = Object.keys(products[0]); //use the keys of the first object as options
+options.splice(0, 1); //remove name field
+const results = [];
+
+function evalProduct(product) { //evaluate the overall 'value' of a product given the selected filters
+   var val = 0; //start at 0
+   for (var i = 0; i < selected.length; i++) {
+      if (product[selected[i]] != null) { //if category is shared
+         val += product[selected[i]]; //increase value
+      }
+   }
+   return result = {name:product.name, value:val}; //return the name and value of the product
+}
+
+function select(option) { //adds selected item to array
+   if (!selected.includes(option)) { //if not already selected
+      selected.push(option); //add to selected list
+   }
+}
+
+function evalOptions() {
+   results.length = 0; //wipe previous results
+   for (i = 0; i < products.length; i++) {
+      results.push(evalProduct(products[i])); //gather results
+   }
+   results.sort((a, b) => (b.value > a.value) ? 1 : -1) //sort results by most valuable
+   for (i = 0; i < 3; i++) {
+      document.getElementById('ticket-selector').innerHTML += '<p>' + results[i].name + ' ' + results[i].value + '</p>'
+   }
+}
+
+for (var i = 0; i < options.length; i++) { //generate links via the actions list
+        document.getElementById('ticket-selector').innerHTML += '<a class="btn btn-default" id="option" onclick="select(\'' + options[i] + '\')"> ' + options[i] + '</a>';
+}
+document.getElementById('ticket-selector').innerHTML += '<p></p><p><a class="btn btn-primary" id="eval" onclick="evalOptions(\'' + evalOptions() + '\')">evaluate</a></p>';
+
+</script>
