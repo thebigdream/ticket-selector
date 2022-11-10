@@ -5,6 +5,13 @@
    .well {
       background-color: #FFFFFF;
       border-left: 5px solid #242b4c;
+      padding: 15px 0px 50px 0px;
+   }
+   .row {  
+      margin: 0px;
+   }
+   .well:hover {
+      background-color: #f0f0f2;
    }
    #left-column {
       border-style: solid;
@@ -12,19 +19,15 @@
       border-color: #c8c9d2;
       padding-bottom: 10px;
    }
-   #row {  
-      margin-right: 0px;
-      margin-left: 0px;
-   }
 </style>
 
 <div class="row" id="ticket-selector">
 <div id="left-column" class="col-xs-12 col-sm-4" >
 <h2>Ticket Selector</h2>   
-<h3>Age</h3>
+<h3>Select an age range</h3>
 <div id="ticket-selector-ages">
 </div>
-<h3>Categories</h3>
+<h3>Select categories that apply to you</h3>
 <div id="ticket-selector-categories">
 </div>
 </div>
@@ -41,7 +44,8 @@ const products =
 [
  {
   "name": "free travel",
-  "link": "TBC",
+  "url": "TBC",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": 5,
   "5-14 years": -5,
   "15 years older": -5,
@@ -58,24 +62,25 @@ const products =
   "tourist": 0,
   "frequent traveller": 0,
   "infrequent traveller": 0,
-  "non-seq": -5
+  "non-seq": 0
  },
  {
   "name": "go card child",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/concessions\/children",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/concessions\/children",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
   "5-14 years": 5,
-  "15 years older": 0,
+  "15 years older": -5,
   "primary school student": 5,
   "high school student": 3,
-  "tertiary student": 0,
+  "tertiary student": -5,
   "senior": 0,
-  "job seeker": 0,
+  "job seeker": -5,
   "asylum seeker": 0,
   "disability": 0,
   "disability carer": -5,
   "pension": 0,
-  "DVA card holder": 0,
+  "DVA card holder": -5,
   "tourist": 0,
   "frequent traveller": 0,
   "infrequent traveller": 0,
@@ -83,13 +88,14 @@ const products =
  },
  {
   "name": "go card concession",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/concessions",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/concessions",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
   "5-14 years": 0,
   "15 years older": 3,
   "primary school student": 0,
   "high school student": 3,
-  "tertiary student": 0,
+  "tertiary student": -5,
   "senior": 0,
   "job seeker": 0,
   "asylum seeker": 0,
@@ -104,12 +110,13 @@ const products =
  },
  {
   "name": "go card senior & senior plus",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/concessions\/seniors",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/concessions\/seniors",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
-  "5-14 years": 0,
+  "5-14 years": -5,
   "15 years older": 0,
-  "primary school student": 0,
-  "high school student": 0,
+  "primary school student": -5,
+  "high school student": -5,
   "tertiary student": 0,
   "senior": 5,
   "job seeker": 0,
@@ -125,19 +132,20 @@ const products =
  },
  {
   "name": "go card stas",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/concessions\/school-students\/school-transport-assistance",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/concessions\/school-students\/school-transport-assistance",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
   "5-14 years": 3,
   "15 years older": 1,
   "primary school student": 3,
   "high school student": 3,
-  "tertiary student": 0,
-  "senior": 0,
-  "job seeker": 0,
+  "tertiary student": -5,
+  "senior": -5,
+  "job seeker": -5,
   "asylum seeker": 0,
   "disability": 0,
   "disability carer": 0,
-  "pension": 0,
+  "pension": -5,
   "DVA card holder": 0,
   "tourist": 0,
   "frequent traveller": 0,
@@ -146,12 +154,13 @@ const products =
  },
  {
   "name": "go card adult",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/go-card\/about-go-card",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/go-card\/about-go-card",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
   "5-14 years": 0,
   "15 years older": 3,
-  "primary school student": 0,
-  "high school student": 0,
+  "primary school student": -5,
+  "high school student": -5,
   "tertiary student": 5,
   "senior": 1,
   "job seeker": 5,
@@ -167,33 +176,35 @@ const products =
  },
  {
   "name": "go explore child",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/visitors-and-tourists\/go-explore",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/visitors-and-tourists\/go-explore",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
   "5-14 years": 2,
   "15 years older": 1,
   "primary school student": 0,
   "high school student": 0,
-  "tertiary student": 0,
+  "tertiary student": -5,
   "senior": 0,
-  "job seeker": 0,
+  "job seeker": -5,
   "asylum seeker": 0,
   "disability": 0,
   "disability carer": 0,
-  "pension": 0,
-  "DVA card holder": 0,
+  "pension": -5,
+  "DVA card holder": -5,
   "tourist": 5,
   "frequent traveller": 0,
-  "infrequent traveller": 1,
+  "infrequent traveller": 0,
   "non-seq": -5
  },
  {
   "name": "go explore adult",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/visitors-and-tourists\/go-explore",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/visitors-and-tourists\/go-explore",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
-  "5-14 years": 0,
+  "5-14 years": -5,
   "15 years older": 2,
-  "primary school student": 0,
-  "high school student": 0,
+  "primary school student": -5,
+  "high school student": -5,
   "tertiary student": 0,
   "senior": 0,
   "job seeker": 0,
@@ -204,35 +215,37 @@ const products =
   "DVA card holder": 0,
   "tourist": 5,
   "frequent traveller": 0,
-  "infrequent traveller": 1,
+  "infrequent traveller": 0,
   "non-seq": -5
  },
  {
   "name": "go seeq child",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/visitors-and-tourists\/go-seeq",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/visitors-and-tourists\/go-seeq",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
   "5-14 years": 2,
   "15 years older": 1,
   "primary school student": 0,
   "high school student": 0,
-  "tertiary student": 0,
+  "tertiary student": -5,
   "senior": 0,
-  "job seeker": 0,
+  "job seeker": -5,
   "asylum seeker": 0,
   "disability": 0,
   "disability carer": 0,
-  "pension": 0,
-  "DVA card holder": 0,
+  "pension": -5,
+  "DVA card holder": -5,
   "tourist": 5,
   "frequent traveller": 0,
-  "infrequent traveller": 1,
+  "infrequent traveller": 0,
   "non-seq": -5
  },
  {
   "name": "go seeq adult",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/visitors-and-tourists\/go-seeq",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/visitors-and-tourists\/go-seeq",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
-  "5-14 years": 0,
+  "5-14 years": -5,
   "15 years older": 2,
   "primary school student": 0,
   "high school student": 0,
@@ -246,12 +259,13 @@ const products =
   "DVA card holder": 0,
   "tourist": 5,
   "frequent traveller": 0,
-  "infrequent traveller": 1,
+  "infrequent traveller": 0,
   "non-seq": -5
  },
  {
   "name": "access pass",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/disability\/translink-access-pass",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/ticket-types\/disability\/translink-access-pass",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
   "5-14 years": 0,
   "15 years older": 0,
@@ -272,12 +286,13 @@ const products =
  },
  {
   "name": "TPI\/EDA",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/concessions\/pensioners-and-veterans",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/concessions\/pensioners-and-veterans",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
-  "5-14 years": 0,
+  "5-14 years": -5,
   "15 years older": 0,
-  "primary school student": 0,
-  "high school student": 0,
+  "primary school student": -5,
+  "high school student": -5,
   "tertiary student": 0,
   "senior": 0,
   "job seeker": 0,
@@ -293,7 +308,8 @@ const products =
  },
  {
   "name": "paper ticket",
-  "link": "https:\/\/translink.com.au\/tickets-and-fares\/buy-and-refund-tickets",
+  "url": "https:\/\/translink.com.au\/tickets-and-fares\/buy-and-refund-tickets",
+  "image": "\/sites\/default\/files\/styles\/original\/public\/acquiadam-assets\/adult-go-card.png?itok=K4OQdmht",
   "0-4 years": -5,
   "5-14 years": 1,
   "15 years older": 1,
@@ -314,7 +330,7 @@ const products =
  }
 ]
 const categories = Object.keys(products[0]); //use the keys of the first object as categories
-categories.splice(0, 2); //remove name and link field as categories
+categories.splice(0, 3); //remove name and link field as categories
 const results = [];
 
 function evalProduct(product) { //evaluate the overall 'value' of a product given the selected filters
@@ -324,32 +340,32 @@ function evalProduct(product) { //evaluate the overall 'value' of a product give
          val += product[selected[i]]; //increase value
       }
    }
-   return result = {name:product.name, value:val, url:product.link}; //return the name, URL and value of the products
+   return result = {name:product.name, value:val, url:product.url, image:product.image}; //return the name, URL, image and value of the product into the list of results
 }
 
 function select(category) { //adds selected item to array
    if (!selected.includes(category)) { //if not already selected
       selected.push(category); //add to selected list
-      document.getElementById(category).classList.toggle("active"); //toggle the button active
-   } else { //if already selected
-      selected = selected.filter(function(e) { return e !== category }) //remove category from array
-      document.getElementById(category).classList.toggle("active"); //toggle the button to inactive
-   }
-   evalOptions(); //update results list
+   } else selected = selected.filter(function(e) { return e !== category }) //else remove category from array
+   document.getElementById(category).classList.toggle("active");
+   evalOptions(3); //update results list
 }
 
-function evalOptions() {
+function evalOptions(length) {
    results.length = 0; //wipe previous results variable
    document.getElementById('ticket-selector-results').innerHTML = ""; //wipe results on page
    if (selected.length > 0) {
       for (i = 0; i < products.length; i++) {
-         results.push(evalProduct(products[i])); //gather results
+        results.push(evalProduct(products[i])); //gather results
       }
-      results.sort((a, b) => (b.value > a.value) ? 1 : -1) //sort results by most valuable
-      for (i = 0; i < 3; i++) { //for the top 3 most valued products
-         if (results[i].value > 0) { //if the result doesn't have negative relevancy
-            document.getElementById('ticket-selector-results').innerHTML += '<div class="well"><p>' + results[i].name + ' ' + results[i].value + '</p><p>' + results[i].url + '</p></div>'
-         }
+   } else results.push({name:products[5].name, value:5, url:products[5].url, image:products[5].image}); //else default to go card
+   results.sort((a, b) => (b.value > a.value) ? 1 : -1) //sort results by most valuable
+   for (i = 0; i < length; i++) { //for the specified amount of products
+      if (results[i].value > 0) { //if the result doesn't have negative relevancy
+         document.getElementById('ticket-selector-results').innerHTML += '<div class="well" id="result' + i + '"></div>';
+         document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<h4><a href="' + results[i].url + '">' + results[i].name + '</h4>'); //title and url
+         document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
+         document.querySelector("#result" + i).insertAdjacentHTML("afterbegin", '<div class="img-responsive original col-xs-6 col-md-3"><a href="' + results[i].url + '"><img class="product-image" src="' + results[i].image + '" typeof="foaf:Image" role="presentation" aria-hidden="true"></a></div>'); //test go card image  
       }
    }
 }
@@ -361,4 +377,6 @@ for (var i = 0; i < categories.length; i++) { //generate links via the actions l
       document.getElementById('ticket-selector-categories').innerHTML += '<a role="button" id="' + categories[i] + '" class="btn btn-default ticket-selector-category" id="category" onclick="select(\'' + categories[i] + '\')"> ' + categories[i] + '</a>';
    }
 }
+
+evalOptions(3);
 </script>
