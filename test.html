@@ -22,24 +22,24 @@
 </style>
 
 <div class="row" id="ticket-selector">
-<div id="left-column" class="col-xs-12 col-sm-4" >
-<h2>Ticket Selector</h2>   
-<h3>Select an age range</h3>
-<div id="ticket-selector-ages">
-</div>
-<h3>Select categories that apply to you</h3>
-<div id="ticket-selector-categories">
-</div>
-</div>
-<div id="right-column" class="col-xs-12 col-sm-8"">
-<h3>Results</h3>   
-<div id="ticket-selector-results">
-</div>
-</div>
+   <div id="left-column" class="col-xs-12 col-sm-4" >
+      <h2>Ticket Selector</h2>   
+      <div id="ticket-selector-ages">
+      <h3>Select an age range</h3>
+   </div>
+   <div id="ticket-selector-categories">
+      <h3>Select categories that apply to you</h3>
+   </div>
+   </div>
+   <div id="right-column" class="col-xs-12 col-sm-8"">
+      <h3>Results</h3>   
+      <div id="ticket-selector-results"></div>
+      <a role="button" class="btn btn-default" onclick="evalProducts(products.length)">View all options</a>
+   </div>
 </div>
 
 <script>
-var selected = []; //the selected categories
+var selected = []; //the categories selected
 const products =
 [
  {
@@ -331,37 +331,36 @@ const products =
 ]
 const categories = Object.keys(products[0]); //use the keys of the first object as categories
 categories.splice(0, 3); //remove name and link field as categories
-const results = [];
-
-function evalProduct(product) { //evaluate the overall 'value' of a product given the selected filters
-   var val = 0; //start at 0
-   for (var i = 0; i < selected.length; i++) {
-      if (product[selected[i]] != null) { //if category is shared
-         val += product[selected[i]]; //increase value
-      }
-   }
-   return result = {name:product.name, value:val, url:product.url, image:product.image}; //return the name, URL, image and value of the product into the list of results
-}
+var results = [];
 
 function select(category) { //adds selected item to array
    if (!selected.includes(category)) { //if not already selected
       selected.push(category); //add to selected list
    } else selected = selected.filter(function(e) { return e !== category }) //else remove category from array
    document.getElementById(category).classList.toggle("active");
-   evalOptions(3); //update results list
+   evalProducts(3); //update results
 }
 
-function evalOptions(length) {
-   results.length = 0; //wipe previous results variable
+function evalProducts(amount) { //evaluates all products against the selected categories and produces a list
    document.getElementById('ticket-selector-results').innerHTML = ""; //wipe results on page
-   if (selected.length > 0) {
-      for (i = 0; i < products.length; i++) {
-        results.push(evalProduct(products[i])); //gather results
+   for (var i = 0; i < products.length; i++) { //for every product
+      products[i].value = 0; //wipe the value of each product
+      for (var j = 0; j < selected.length; j++) { //for every selected category
+         products[i].value += products[i][selected[j]]; //increment product's value
       }
-   } else results.push({name:products[5].name, value:5, url:products[5].url, image:products[5].image}); //else default to go card
-   results.sort((a, b) => (b.value > a.value) ? 1 : -1) //sort results by most valuable
-   for (i = 0; i < length; i++) { //for the specified amount of products
-      if (results[i].value > 0) { //if the result doesn't have negative relevancy
+   }
+   if (selected.length == 0) { //if nothing is selected
+      products.find(obj => obj.name = "go card adult").value = 5; //prioritise go card
+   }
+   results = products.slice(0); //create separate array to filter results
+   results.sort(function(a,b) { //sort results by value
+      return b.value - a.value;
+   });
+   if (amount < products.length) { //if not looking at all products, filter out null or negative results
+      results = results.filter(d => d.value > 0); //filter null or negative results
+   }
+   for (i = 0; i < amount; i++) { //create cards for the specified amount of products
+      if (results[i] != null) { //if the requested result exists
          document.getElementById('ticket-selector-results').innerHTML += '<div class="well" id="result' + i + '"></div>';
          document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<h4><a href="' + results[i].url + '">' + results[i].name + '</h4>'); //title and url
          document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
@@ -370,13 +369,16 @@ function evalOptions(length) {
    }
 }
 
-for (var i = 0; i < categories.length; i++) { //generate links via the actions list
-   if (categories[i].includes("years")) { //if an age category
-      document.getElementById('ticket-selector-ages').innerHTML += '<a role="button" id="' + categories[i] + '" class="btn btn-default ticket-selector-category" id="category" onclick="select(\'' + categories[i] + '\')"> ' + categories[i] + '</a>';
-   } else {  
-      document.getElementById('ticket-selector-categories').innerHTML += '<a role="button" id="' + categories[i] + '" class="btn btn-default ticket-selector-category" id="category" onclick="select(\'' + categories[i] + '\')"> ' + categories[i] + '</a>';
+function generateButtons() {
+   for (var i = 0; i < categories.length; i++) { //generate categories
+      if (categories[i].includes("years")) { //if an age category
+         document.getElementById('ticket-selector-ages').insertAdjacentHTML("afterend", '<a role="button" id="' + categories[i] + '" class="btn btn-default ticket-selector-category" id="category" onclick="select(\'' + categories[i] + '\')"> ' + categories[i] + '</a>');
+      } else {  
+         document.getElementById('ticket-selector-categories').insertAdjacentHTML ("afterend", '<a role="button" id="' + categories[i] + '" class="btn btn-default ticket-selector-category" id="category" onclick="select(\'' + categories[i] + '\')"> ' + categories[i] + '</a>');
+      }
    }
 }
 
-evalOptions(3);
+generateButtons();
+evalProducts(1); //initial run
 </script>
