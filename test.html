@@ -13,11 +13,11 @@
    .my-2px, input[type="radio"], input[type="checkbox"] {
       margin-right: 5px;
    }
-   #ticket-selector-categories {
-      margin-bottom: 10px;
-      margin-right: 10px;
+   .checkbox {
+      margin-top: 0px;
    }
-   #ticket-selector-ages {
+   #ticket-selector-categories, #ticket-selector-ages {
+      column-count: 2;
       margin-right: 10px;
    }
    #left-column {
@@ -26,20 +26,12 @@
       border-color: #c8c9d2;
       padding-bottom: 10px;
    }
+   #submit {
+      margin-top: 20px;
+   }
 </style>
-
+  
 <div class="row" id="ticket-selector">
-<div id="left-column" class="col-xs-12 col-sm-4" >
-<h2>Ticket Selector</h2>   
-<h3>Select an age range</h3>
-<div id="ticket-selector-ages"></div>
-<h3>Select categories that apply to you</h3>
-<div id="ticket-selector-categories"></div>
-</div>
-<div id="right-column" class="col-xs-12 col-sm-8"">
-<h3>Results</h3>   
-<div id="ticket-selector-results"></div>
-</div>
 </div>
 
 <script>
@@ -337,37 +329,48 @@ const categories = Object.keys(products[0]); //use the keys of the first object 
 categories.splice(0, 3); //remove name, image and link field from categories
 const results = [];
 
+document.querySelector("#ticket-selector").insertAdjacentHTML("beforeend", "<div id='left-column' class='col-xs-12 col-sm-4'>");
+document.querySelector("#ticket-selector").insertAdjacentHTML("beforeend", "<div id='right-column' class='col-xs-12 col-sm-8'>");
+document.querySelector("#left-column").insertAdjacentHTML("beforeend", "<h2>Ticket Selector</h2>");
+document.querySelector("#left-column").insertAdjacentHTML("beforeend", "<h3>Select an age range</h3>");
+document.querySelector("#left-column").insertAdjacentHTML("beforeend", "<div id='ticket-selector-ages'>");
+document.querySelector("#left-column").insertAdjacentHTML("beforeend", "<h3>Select categories that apply to you</h3>");
+document.querySelector("#left-column").insertAdjacentHTML("beforeend", "<div id='ticket-selector-categories'>");
+document.querySelector("#left-column").insertAdjacentHTML("beforeend", '<p><a role="button" id="submit" class="btn btn-alt" onclick="evalProducts(products.length, false)">Submit</a></p>'); //add submit
+document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<h3>Results</h3>");
+document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<div id='ticket-selector-results'>");
+
 function select(category) { //adds selected item to array
    if (!selected.includes(category)) { //if not already selected
       selected.push(category); //add to selected list
    } else selected = selected.filter(function(e) { return e !== category }) //else remove category from array
    document.getElementById(category).classList.toggle("active");
-   evalProducts(3, true); //update results
+   evalProducts(); //update results
 }
 
-function evalProducts(amount, filter) { //evaluates all products against the selected categories and produces a list
+function evalProducts() { //evaluates all products against the selected categories and produces a list
    document.getElementById('ticket-selector-results').innerHTML = ""; //wipe results on page
    var inputs = document.getElementsByClassName('ticket-selector-radio'); //get all input items
    var selected = []; //wipe previously selected list
-   for (i = 0; i < inputs.length; i++) { //for every test item
+   for (i = 0; i < inputs.length; i++) { //for every input item
       if (inputs[i].checked) { //if box is ticked
-         selected.push(inputs[i].id); //submit to selected array
+         selected.push(inputs[i].id); //add to selected array
       }
    }
-   for (var i = 0; i < products.length; i++) { //for every product
-      products[i].value = 0; //wipe the value of each product
-      for (var j = 0; j < selected.length; j++) { //for every selected category
-         products[i].value = products[i][selected[j]]; //increment product's value
+   for (var i = 0; i < products.length; i++) { //for every product, wipe the previous value and then set values based on the selected category array
+      products[i].value = 0; 
+      for (var j = 0; j < selected.length; j++) { 
+         products[i].value = products[i][selected[j]];
       }
    }
-   if (selected.length == 0) { //if nothing is selected
-      products[5].value = 5; //prioritise go card
+   if (selected.length == 0) { //if nothing is selected prioritise go card
+      products[5].value = 5;
    }
    var results = products.slice(0); //create separate array to filter results
    results.sort(function(a,b) {
       return b.value - a.value;
    });
-   for (i = 0; i < amount; i++) { //for the specified amount of products
+   for (i = 0; i < products.length; i++) { //add result cards
       document.getElementById('ticket-selector-results').innerHTML += '<div class="well" id="result' + i + '"></div>';
       document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<h4><a href="' + results[i].url + '">' + results[i].name + '</h4>'); //title and url
       document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
@@ -383,8 +386,6 @@ for (var i = 0; i < categories.length; i++) { //generate categories
    }
 }
 
-document.querySelector("#left-column").insertAdjacentHTML("beforeend", '<p><a role="button" class="btn btn-alt" onclick="evalProducts(products.length, false)">Submit</a></p>'); //add view all button
 
-
-evalProducts(1, true); //initial run
+evalProducts(); //initial run
 </script>
