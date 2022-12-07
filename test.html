@@ -1,7 +1,4 @@
 <style>
-   .ticket-selector-category {
-      margin: 5px;
-   }
    .well {
       background-color: #FFFFFF;
       border-left: 5px solid #242b4c;
@@ -12,6 +9,16 @@
    }
    .well:hover {
       background-color: #f0f0f2;
+   }
+   .my-2px, input[type="radio"], input[type="checkbox"] {
+      margin-right: 5px;
+   }
+   #ticket-selector-categories {
+      margin-bottom: 10px;
+      margin-right: 10px;
+   }
+   #ticket-selector-ages {
+      margin-right: 10px;
    }
    #left-column {
       border-style: solid;
@@ -25,16 +32,13 @@
 <div id="left-column" class="col-xs-12 col-sm-4" >
 <h2>Ticket Selector</h2>   
 <h3>Select an age range</h3>
-<div id="ticket-selector-ages">
-</div>
+<div id="ticket-selector-ages"></div>
 <h3>Select categories that apply to you</h3>
-<div id="ticket-selector-categories">
-</div>
+<div id="ticket-selector-categories"></div>
 </div>
 <div id="right-column" class="col-xs-12 col-sm-8"">
 <h3>Results</h3>   
-<div id="ticket-selector-results">
-</div>
+<div id="ticket-selector-results"></div>
 </div>
 </div>
 
@@ -330,7 +334,7 @@ const products =
  }
 ]
 const categories = Object.keys(products[0]); //use the keys of the first object as categories
-categories.splice(0, 3); //remove name and link field as categories
+categories.splice(0, 3); //remove name, image and link field from categories
 const results = [];
 
 function select(category) { //adds selected item to array
@@ -343,6 +347,13 @@ function select(category) { //adds selected item to array
 
 function evalProducts(amount, filter) { //evaluates all products against the selected categories and produces a list
    document.getElementById('ticket-selector-results').innerHTML = ""; //wipe results on page
+   var inputs = document.getElementsByClassName('ticket-selector-radio'); //get all input items
+   var selected = []; //wipe previously selected list
+   for (i = 0; i < inputs.length; i++) { //for every test item
+      if (inputs[i].checked) { //if box is ticked
+         selected.push(inputs[i].id); //submit to selected array
+      }
+   }
    for (var i = 0; i < products.length; i++) { //for every product
       products[i].value = 0; //wipe the value of each product
       for (var j = 0; j < selected.length; j++) { //for every selected category
@@ -366,13 +377,14 @@ function evalProducts(amount, filter) { //evaluates all products against the sel
 
 for (var i = 0; i < categories.length; i++) { //generate categories
    if (categories[i].includes("years")) { //if an age category
-      document.getElementById('ticket-selector-ages').innerHTML += '<a role="button" id="' + categories[i] + '" class="btn btn-default ticket-selector-category" id="category" onclick="select(\'' + categories[i] + '\')"> ' + categories[i] + '</a>';
+      document.getElementById('ticket-selector-ages').innerHTML += '<label class="checkbox"><input class="ticket-selector-radio" id="' + categories[i] + '" name="IsRegularService" type="checkbox" value="true">' + categories[i] + '</label>';
    } else {  
-      document.getElementById('ticket-selector-categories').innerHTML += '<a role="button" id="' + categories[i] + '" class="btn btn-default ticket-selector-category" id="category" onclick="select(\'' + categories[i] + '\')"> ' + categories[i] + '</a>';
+      document.getElementById('ticket-selector-categories').innerHTML += '<label class="checkbox"><input class="ticket-selector-radio" id="' + categories[i] + '" name="IsRegularService" type="checkbox" value="true">' + categories[i] + '</label>';
    }
 }
 
-document.querySelector("#right-column").insertAdjacentHTML("beforeend", '<a role="button" class="btn btn-default" onclick="evalProducts(products.length, false)">View all options</a>'); //add view all button
+document.querySelector("#left-column").insertAdjacentHTML("beforeend", '<p><a role="button" class="btn btn-alt" onclick="evalProducts(products.length, false)">Submit</a></p>'); //add view all button
+
 
 evalProducts(1, true); //initial run
 </script>
