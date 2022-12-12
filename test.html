@@ -327,7 +327,8 @@ const products =
 ]
 const categories = Object.keys(products[0]); //use the keys of the first object as categories
 categories.splice(0, 3); //remove name, image and link field from categories
-const results = [];
+var results = [];
+var page = 1;
 
 document.querySelector("#ticket-selector").insertAdjacentHTML("beforeend", "<div id='left-column' class='col-xs-12 col-sm-4'>");
 document.querySelector("#ticket-selector").insertAdjacentHTML("beforeend", "<div id='right-column' class='col-xs-12 col-sm-8'>");
@@ -339,6 +340,14 @@ document.querySelector("#left-column").insertAdjacentHTML("beforeend", "<div id=
 document.querySelector("#left-column").insertAdjacentHTML("beforeend", '<p><a role="button" id="submit" class="btn btn-alt" onclick="evalProducts(products.length, false)">Submit</a></p>'); //add submit
 document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<h3>Results</h3>");
 document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<div id='ticket-selector-results'>");
+for (i = 1; i < products.length/4+1; i++) {
+   document.querySelector("#right-column").insertAdjacentHTML("beforeend", '<button class="page" onClick="pagination(this.innerHTML)">' + i + '</button>');
+}
+
+function pagination(val) {
+   page = val;
+   showResults();
+}
 
 function select(category) { //adds selected item to array
    if (!selected.includes(category)) { //if not already selected
@@ -351,7 +360,7 @@ function select(category) { //adds selected item to array
 function evalProducts() { //evaluates all products against the selected categories and produces a list
    document.getElementById('ticket-selector-results').innerHTML = ""; //wipe results on page
    var inputs = document.getElementsByClassName('ticket-selector-radio'); //get all input items
-   var selected = []; //wipe previously selected list
+   selected = []; //wipe previously selected list
    for (i = 0; i < inputs.length; i++) { //for every input item
       if (inputs[i].checked) { //if box is ticked
          selected.push(inputs[i].id); //add to selected array
@@ -366,15 +375,22 @@ function evalProducts() { //evaluates all products against the selected categori
    if (selected.length == 0) { //if nothing is selected prioritise go card
       products[5].value = 5;
    }
-   var results = products.slice(0); //create separate array to filter results
+   results = products.slice(0); //create separate array to filter results
    results.sort(function(a,b) {
       return b.value - a.value;
    });
+   showResults();
+}
+
+function showResults() {
+   document.getElementById('ticket-selector-results').innerHTML = ""; //wipe previous
    for (i = 0; i < products.length; i++) { //add result cards
-      document.getElementById('ticket-selector-results').innerHTML += '<div class="well" id="result' + i + '"></div>';
-      document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<h4><a href="' + results[i].url + '">' + results[i].name + '</h4>'); //title and url
-      document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
-      document.querySelector("#result" + i).insertAdjacentHTML("afterbegin", '<div class="img-responsive original col-xs-6 col-md-3"><a href="' + results[i].url + '"><img class="product-image" src="' + results[i].image + '" typeof="foaf:Image" role="presentation" aria-hidden="true"></a></div>'); //test go card image  
+      if (i < Math.ceil(page*4) && (i >= Math.ceil((page-1)*4))) { //ensure results are within the page range
+         document.getElementById('ticket-selector-results').innerHTML += '<div class="well" id="result' + i + '"></div>';
+         document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<h4><a href="' + results[i].url + '">' + results[i].name + '</h4>'); //title and url
+         document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
+         document.querySelector("#result" + i).insertAdjacentHTML("afterbegin", '<div class="img-responsive original col-xs-6 col-md-3"><a href="' + results[i].url + '"><img class="product-image" src="' + results[i].image + '" typeof="foaf:Image" role="presentation" aria-hidden="true"></a></div>'); //test go card image  
+      }
    }
 }
 
