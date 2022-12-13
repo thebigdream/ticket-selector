@@ -340,13 +340,9 @@ document.querySelector("#left-column").insertAdjacentHTML("beforeend", "<div id=
 document.querySelector("#left-column").insertAdjacentHTML("beforeend", '<p><a role="button" id="submit" class="btn btn-alt" onclick="evalProducts(products.length, false)">Submit</a></p>'); //add submit
 document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<h3>Results</h3>");
 document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<div id='ticket-selector-results'>");
+document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<ul class='pagination'></ul>");
 for (i = 1; i < products.length/4+1; i++) {
-   document.querySelector("#right-column").insertAdjacentHTML("beforeend", '<button class="page" onClick="pagination(this.innerHTML)">' + i + '</button>');
-}
-
-function pagination(val) {
-   page = val;
-   showResults();
+   document.querySelector(".pagination").insertAdjacentHTML("beforeend", '<li class="page"><a style="cursor:pointer">' + i + '</a></li>');
 }
 
 function select(category) { //adds selected item to array
@@ -384,12 +380,14 @@ function evalProducts() { //evaluates all products against the selected categori
 
 function showResults() {
    document.getElementById('ticket-selector-results').innerHTML = ""; //wipe previous
+   var aTag = document.createElement('a');
    for (i = 0; i < products.length; i++) { //add result cards
       if (i < Math.ceil(page*4) && (i >= Math.ceil((page-1)*4))) { //ensure results are within the page range
          document.getElementById('ticket-selector-results').innerHTML += '<div class="well" id="result' + i + '"></div>';
-         document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<h4><a href="' + results[i].url + '">' + results[i].name + '</h4>'); //title and url
+         document.querySelector("#result" + i).insertAdjacentHTML("afterbegin", '<a href="' + results[i].url + '">'); //url
+         document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<h4>' + results[i].name + '</h4>'); //title and url
          document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
-         document.querySelector("#result" + i).insertAdjacentHTML("afterbegin", '<div class="img-responsive original col-xs-6 col-md-3"><a href="' + results[i].url + '"><img class="product-image" src="' + results[i].image + '" typeof="foaf:Image" role="presentation" aria-hidden="true"></a></div>'); //test go card image  
+         document.querySelector("#result" + i).insertAdjacentHTML("afterbegin", '<div class="img-responsive original col-xs-6 col-md-3"><img class="product-image" src="' + results[i].image + '" typeof="foaf:Image" role="presentation" aria-hidden="true"></div>'); //test go card image  
       }
    }
 }
@@ -402,6 +400,17 @@ for (var i = 0; i < categories.length; i++) { //generate categories
    }
 }
 
-
 evalProducts(); //initial run
+
+//add event listeners for pagination clicks
+var pagination = document.getElementsByClassName('page');
+for (i = 0; i < pagination.length; i++) {
+   pagination[i].addEventListener("click", function() {
+      for (let x of pagination) x.classList.remove('active'); //wipe all active states      
+      page = this.innerText; //set page as clicked item
+      if (this.innerText == page) this.classList.toggle('active');
+      showResults();
+      });
+}
+
 </script>
