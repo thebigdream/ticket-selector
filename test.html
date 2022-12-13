@@ -380,14 +380,18 @@ function evalProducts() { //evaluates all products against the selected categori
 
 function showResults() {
    document.getElementById('ticket-selector-results').innerHTML = ""; //wipe previous
-   var aTag = document.createElement('a');
    for (i = 0; i < products.length; i++) { //add result cards
-      if (i < Math.ceil(page*4) && (i >= Math.ceil((page-1)*4))) { //ensure results are within the page range
+      var aTag = document.createElement('a');
+      if (i < Math.ceil(page*4) && (i >= Math.ceil((page-1)*4))) { //if results are within the page range
          document.getElementById('ticket-selector-results').innerHTML += '<div class="well" id="result' + i + '"></div>';
-         document.querySelector("#result" + i).insertAdjacentHTML("afterbegin", '<a href="' + results[i].url + '">'); //url
-         document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<h4>' + results[i].name + '</h4>'); //title and url
-         document.querySelector("#result" + i).insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
-         document.querySelector("#result" + i).insertAdjacentHTML("afterbegin", '<div class="img-responsive original col-xs-6 col-md-3"><img class="product-image" src="' + results[i].image + '" typeof="foaf:Image" role="presentation" aria-hidden="true"></div>'); //test go card image  
+         var result = document.getElementById('result' + i);
+         result.insertAdjacentHTML("beforeend", '<h4>' + results[i].name + '</h4>'); //title and url
+         result.insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
+         result.insertAdjacentHTML("afterbegin", '<div class="img-responsive original col-xs-6 col-md-3"><img class="product-image" src="' + results[i].image + '" typeof="foaf:Image" role="presentation" aria-hidden="true"></div>'); //test go card image  
+         aTag.innerHTML = result.outerHTML;
+         aTag.setAttribute('href', results[i].url);
+         result.parentNode.insertBefore(aTag, result);
+         result.remove();
       }
    }
 }
