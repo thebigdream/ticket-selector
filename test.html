@@ -342,7 +342,8 @@ document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<h3>Res
 document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<div id='ticket-selector-results'>");
 document.querySelector("#right-column").insertAdjacentHTML("beforeend", "<ul class='pagination'></ul>");
 for (i = 1; i < products.length/4+1; i++) {
-   document.querySelector(".pagination").insertAdjacentHTML("beforeend", '<li class="page"><a style="cursor:pointer">' + i + '</a></li>');
+   if (i == page) document.querySelector(".pagination").insertAdjacentHTML("beforeend", '<li class="page active"><a style="cursor:pointer">' + i + '</a></li>');
+   else document.querySelector(".pagination").insertAdjacentHTML("beforeend", '<li class="page"><a style="cursor:pointer">' + i + '</a></li>');
 }
 
 function select(category) { //adds selected item to array
@@ -388,6 +389,7 @@ function showResults() {
          result.insertAdjacentHTML("beforeend", '<h4>' + results[i].name + '</h4>'); //title and url
          result.insertAdjacentHTML("beforeend", '<p>Debug value: ' + results[i].value + '</p>'); //debug value
          result.insertAdjacentHTML("afterbegin", '<div class="img-responsive original col-xs-6 col-md-3"><img class="product-image" src="' + results[i].image + '" typeof="foaf:Image" role="presentation" aria-hidden="true"></div>'); //test go card image  
+         //wrap each result in an <a> tag linking to a content page
          aTag.innerHTML = result.outerHTML;
          aTag.setAttribute('href', results[i].url);
          result.parentNode.insertBefore(aTag, result);
